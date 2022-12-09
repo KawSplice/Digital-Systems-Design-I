@@ -1,0 +1,61 @@
+//-------------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab4
+//   Project: digital door lock system
+//   File Name: Lab4.v
+//   List of other files used: Key_Pad_Scanner.v, Clock_Divider.v, my7Seg.V 
+//										 reset_15.v, Sequence_Builder.v, Sequence_Checker.v 									 	
+//-------------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: Top Level for our digital door lock system
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision: 02/4-22/2022
+//					
+//-----------------------------------------------------------------------------
+module Lab4 ( 
+	input clk,
+	input  [3:0] rows,	//key
+	output unlock,
+	output error,
+	output [3:0] pad,
+	output [6:0] HEX0,
+	output [6:0] HEX1,
+	output [6:0] HEX2,
+	output [6:0] HEX3
+);
+
+//wires
+wire clk_out;
+wire [3:0]key;
+wire key_pressed;
+wire reset;
+wire check_seq;
+wire [3:0]seq1;
+wire [3:0]seq2;
+wire [3:0]seq3;
+wire [3:0]seq4;
+wire end_15;
+wire start_15;
+wire seq_done;
+wire led_done;
+wire reset_done;
+wire reset_out;
+
+//modules
+Clock_Divider    u1(clk,clk_out);
+Key_Pad_Scanner  u2(clk_out,rows,pad,key,key_pressed);
+Sequence_Builder u3(clk_out,key_pressed,end_15,key,reset_done,reset_out,start_15,seq1,seq2,seq3,seq4,check_seq);
+reset_15         u4(clk_out,start_15,end_15);
+Sequence_Checker u5(clk_out,reset_out,seq1,seq2,seq3,seq4,check_seq,error,unlock,reset_done);
+
+my7Seg		 	  u6(seq4,HEX0);
+my7Seg			  u7(seq3,HEX1);
+my7Seg 			  u8(seq2,HEX2);
+my7Seg 			  u9(seq1,HEX3);
+
+endmodule
+
