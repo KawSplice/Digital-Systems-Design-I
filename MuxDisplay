@@ -1,0 +1,47 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 3 
+//   Project: Multiplexed Display
+//   File Name: myMuxDisplay.v
+//   List of other files used:  Clock_Divider2.v Decoder.v
+//										 Control_Gen.V myMux.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description:
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision:
+//					1/24/2022
+// 				1/26/2022
+//-----------------------------------------------------------------------------
+module myMuxDisplay ( 
+	input clk,
+	input [6:0] Ones, 
+	input [6:0] Tens,	
+	input [6:0] Hundreds,
+	input [6:0] Thousands,
+	output[6:0]HEX0,
+	output[3:0] dig_sel
+);
+	
+//-----------------------------------------------------------
+// Signal Declarations: wire
+//-----------------------------------------------------------	
+	wire clk_out;	 
+	wire [1:0] control_out;
+
+//-----------------------------------------------------------
+// Top-level Declarations: modules
+//-----------------------------------------------------------		
+
+	Clock_Divider2   u1(clk,clk_out);
+	Control_Gen   	 u3(clk_out,control_out);
+	Decoder 		    u4(clk_out,control_out,dig_sel);
+	myMux 		    u5(clk_out,Ones,Tens,Hundreds,Thousands,control_out,HEX0);
+	
+endmodule 
+	
+	
