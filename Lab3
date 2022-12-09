@@ -1,0 +1,64 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 3 
+//   Project: Multiplexed Display
+//   File Name: Lab3.v
+//   List of other files used: Clock_Divider.v, my12bit_upd_couner.v,
+// 									 BinToBCDConversion.v, myMuxDisplay.v, my7Seg.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description:parameterized 12-bit up/down counter with enable 
+//							 and reset.You will then send your binary outputs through 
+//							 a binary to BCD converter. Each of these will be fed into 
+//							 a BCD to seven segment decoders. You will then use the 
+//							 CL3641AH muxed seven segment display to display it. You 
+//							 will wire this up using the GPIO 0 header on 
+//                      the DE1-SoC
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision:
+//					1/24/2022
+// 				1/26/2022
+//-----------------------------------------------------------------------------
+module Lab3(
+	input clk,
+	input enable,
+	input reset,
+	input up_dn,
+	output [6:0] HEX,
+	output [3:0] dig_sel_out
+);
+//-----------------------------------------------------------
+// Signal Declarations: wire
+//-----------------------------------------------------------
+	wire clk_100Hz;       //100Hz
+	wire [11:0] count;	 //count
+	wire [3:0] d;			 //thousands
+	wire [3:0] c;			 //hundreds
+	wire [3:0] b;			 //tens
+	wire [3:0] a;   		 //ones
+	wire [3:0] dig_sel;
+	wire [6:0] HEX0;
+	wire [6:0] HEX1;
+	wire [6:0] HEX2;
+	wire [6:0] HEX3;
+	
+//-----------------------------------------------------------
+// Top-level Declarations: modules
+//-----------------------------------------------------------	
+	Clock_Divider    		     u1(clk,clk_100Hz); 
+	my12bit_upd_counter 		  u2(clk_100Hz,enable,reset,up_dn,count);
+	BinToBCDConversion        u3(count,d,c,b,a);
+	my7Seg					     u4(d,HEX0);
+	my7Seg					     u5(c,HEX1);
+	my7Seg					     u6(b,HEX2);
+	my7Seg					     u7(a,HEX3);
+	myMuxDisplay  			     u8(clk,HEX3,HEX2,HEX1,HEX0,HEX,dig_sel_out);
+	
+endmodule
+	
+	
+	
