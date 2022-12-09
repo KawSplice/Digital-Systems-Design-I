@@ -1,0 +1,154 @@
+//-------------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab:  Lab4
+//   Project: digital door lock system
+//   File Name: Sequence_Builder.v
+//   List of other files used: Key_Pad_Scanner.v, Clock_Divider.v, 
+//										 reset_15.v,my7Seg.v, Sequence_Checker.v 									 	
+//-------------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: Will create our Sequence and will use our state machine
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision: 02/4-22/2022
+//					
+//-----------------------------------------------------------------------------
+module Sequence_Builder ( 
+	input clk,
+	input key_detected,
+	input reset,
+	input  [3:0] key, 
+	input led_done,
+	output reg reset_out,
+	output reg start_15,
+	output reg [3:0] seq1,
+	output reg [3:0] seq2,
+	output reg [3:0] seq3,
+	output reg [3:0] seq4,
+	output reg check_seq
+);
+
+
+parameter [2:0] init 	= 3'b000,
+					 first   = 3'b001,
+					 second  = 3'b010,
+					 third   = 3'b011,
+					 fourth  = 3'b100,
+					 final   = 3'b111;
+
+reg [2:0] state;
+reg [3:0] previous_key;
+		
+initial state <= init;		
+// Always block to handle the case portion			
+always @(posedge clk or posedge reset)
+		begin 
+			if(reset)
+				state <= init;
+			else if(key == 4'b1110)
+				state <= init;
+			else if (key == 4'b1111 && state != fourth && state != final)
+				state <= final;			
+			else if (state == final && led_done)
+				state <= init;
+			else if (key_detected == 1'b1)
+				begin 
+					previous_key <= key;			 
+					case(state)
+						init    : state <= first;
+						first   : state <= second;
+						second  : state <= third;
+						third   : state <= fourth;
+						fourth  : begin 
+											if (key == 4'b1111)
+												state <= final;
+											else state <= init; 
+									 end
+						final   : state <= state;
+						default : state <= state;
+					endcase
+				end
+			else 
+				state <= state;			
+		end
+// Always block to handle output
+	always @(posedge clk)
+	begin
+			case(state)
+				init 	: begin
+							seq1 <= 4'b1111;
+							seq2 <= 4'b1111;
+							seq3 <= 4'b1111;
+							seq4 <= 4'b1111;
+							check_seq <= 0;
+							reset_out <= 1;
+							start_15 <= 0;
+						  end
+				
+				first : begin
+							seq1 <= previous_key;
+							seq2 <= seq2;
+							seq3 <= seq3;
+							seq4 <= seq4;
+							check_seq <= 0;
+							start_15 <= 1;
+							reset_out <= 0;	
+							
+						  end
+				
+				second: begin
+							seq1 <= seq1;
+							seq2 <= previous_key;
+							seq3 <= seq3;
+							seq4 <= seq4;
+							check_seq <= 0;
+							start_15 <= 1;
+							reset_out <= 0;
+						  end
+				
+				third : begin
+							seq1 <= seq1;
+							seq2 <= seq2;
+							seq3 <= previous_key;
+							seq4 <= seq4;
+							check_seq <= 0;
+							reset_out <= 0;
+							start_15 <= 1;
+							
+						  end
+				
+				fourth: begin
+							seq1 <= seq1;
+							seq2 <= seq2;
+							seq3 <= seq3;
+							seq4 <= previous_key;
+							check_seq <= 0;
+							reset_out <= 0;
+							start_15 <= 1;
+						  end
+				
+				final : begin
+							seq1 <= seq1;
+							seq2 <= seq2;
+							seq3 <= seq3;
+							seq4 <= seq4;
+							check_seq <= 1;
+							reset_out <= 0;
+							start_15 <= 0;
+						  end
+				default: 
+						   begin
+								seq1 <= 4'b1111;					
+								seq2 <= 4'b1111;
+								seq3 <= 4'b1111;							
+								seq4 <= 4'b1111;
+							   check_seq <= 0;
+								reset_out <= 0;
+								start_15 <= 0;
+					       end	
+			endcase 
+	end
+endmodule
