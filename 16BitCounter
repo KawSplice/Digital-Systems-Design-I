@@ -1,0 +1,40 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 2 
+//   Project: Intro to Hierarchical
+//   File Name: my16BitCounter.v
+//   List of other files used: my7Seg.v, BinToBCDConversion.v,Lab2.v,
+//										 myClockDivider.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: We create a 4-bit counter with parameters so we can use
+// 		it as a 16-bit counter later on in your top level.
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision:
+// 		01/13/2022 Create the lab
+// 		01/14/2022 present the lab
+//-----------------------------------------------------------------------------
+module my16BitCounter  
+	#(parameter BIT_COUNT = 16) (
+	input clk, 
+	input reset,
+	input enable,
+	output reg [BIT_COUNT - 1:0] count
+);
+
+always @(posedge clk)
+	begin
+		if(reset)
+			count <= 15'b00000000000000;
+		else if (enable == 0)
+			count <= count;
+		
+		else
+			count <= count + 1;
+	end
+endmodule
+
