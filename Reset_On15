@@ -1,0 +1,51 @@
+//-------------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab:  lab4
+//   Project: digital door lock system
+//   File Name: reset_15.v
+//   List of other files used: Key_Pad_Scanner.v, Clock_Divider.v, my7Seg.V 
+//										 , Sequence_Builder.v, Sequence_Checker.v 									 	
+//-------------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: Will reset our our Sequence_Builder
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision: 02/4-22/2022
+//					
+//-----------------------------------------------------------------------------
+module reset_15 (
+
+	input clk,
+	input start_of_seq,
+	
+	output reg reset
+	
+
+);
+
+reg [9:0]count = 0;
+// Always block to handle the count portion	
+always @ (posedge clk)
+begin
+	
+	if (start_of_seq == 1)
+	begin
+		count <= count + 1;
+		
+		if (count >= 225)
+			begin
+				reset <= 1'b1;
+				count <= 0;
+			end
+	end
+	
+	else if (start_of_seq == 0)
+		begin
+			reset <= 0;
+			count <= 0;
+		end
+end
+endmodule
