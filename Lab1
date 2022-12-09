@@ -1,0 +1,50 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 1
+//   Project: Adder to 7-segment 
+//   File Name: Lab01
+//   List of other files used: Adder.v and my7Seg.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+//   read in 8 of the switches treating them as two 4-bit binary numbers. 
+//   You will then display the numbers on two of the 7-segment displays. 
+//   Next you will add the numbers and display the result on another of the 
+//   7-segment displays.
+//-----------------------------------------------------------------------------    
+//   Date:	01/06/2022
+//   Version: 	1.0
+//   Revision: none 
+//-----------------------------------------------------------------------------
+
+
+module Lab01 ( 
+	input [3:0] num1,
+	input [3:0] num2,
+	output[6:0] HEX0,
+	output[6:0] HEX1,
+	output[6:0] HEX2,
+	output[6:0] HEX3,
+	output[6:0] HEX4,
+	output[6:0] HEX5
+);
+//-----------------------------------------------------------
+// Signal Declarations: wire
+//-----------------------------------------------------------
+
+wire [4:0] Y;
+
+//-------------------------------------------------------------
+// We are creating top level in order to add our output and
+// decode and move it into the 7-seg 
+//-------------------------------------------------------------
+Adder  u1(num1, num2, Y);
+my7Seg u2({1'b0,num1},HEX1,HEX0);
+my7Seg u3({1'b0,num2},HEX3,HEX2);
+my7Seg u4(Y[4:0],HEX5,HEX4);
+
+endmodule  
+
+
+
