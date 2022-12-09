@@ -1,0 +1,50 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 2 
+//   Project: Intro to Hierarchical
+//   File Name: myClockDivider.v
+//   List of other files used: my7Seg.v, my16BitCounter.v,
+//										 BinToBCDConversion.v,Lab2.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: We create a clock divider so we can slow down our 50MHz 
+//      in the lab we calulated
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision:
+// 		01/13/2022 Create the lab
+// 		01/14/2022 present the lab
+//-----------------------------------------------------------------------------
+module ClkDivider(
+	input clk,
+	output reg clk_out
+);
+
+//-----------------------------------------------------------
+// Signal Declarations: reg
+//-----------------------------------------------------------
+
+	reg [24:0] count;	// Make the counter big enough to hold our number
+	
+	// Always block to handle the counter
+	always @(posedge clk )
+	begin
+
+		if(count < 250000 - 1)	// 50,000,000 / 500,000 = 100 Hz
+			count <= count + 1;
+		else
+			count <= 25'b0;
+	end
+
+	// Always block to handle the flip flop portion
+	always @(posedge clk)
+	begin
+		if(count == 250000 - 1)
+			clk_out <= ~clk_out;
+		else
+			clk_out <= clk_out;
+	end
+endmodule
