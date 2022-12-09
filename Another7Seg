@@ -1,0 +1,50 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 2 
+//   Project: Intro to Hierarchical
+//   File Name: my7Seg.v
+//   List of other files used: BinToBCDConversion.v,Lab2.v,
+//										 myClockDivider.v,my16BitCounter.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: We create a 7-segment display and use the number 0 - 9
+//   		once it goes over 9 it will then display 0 - 9 again however move over 
+//			on the other segment displays.
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision:
+// 		01/13/2022 Create the lab
+// 		01/14/2022 present the lab
+//-----------------------------------------------------------------------------
+module my7Seg ( 
+	input [3:0] c,
+	output reg[6:0] HEX0 
+);
+
+always @(c)
+	begin 
+		case(c) 
+				
+				0 : HEX0 = 7'b1000000;
+				1 : HEX0 = 7'b1111001;
+				2 : HEX0 = 7'b0100100;
+				3 : HEX0 = 7'b0110000;
+			   4 : HEX0 = 7'b0011001;
+				5 : HEX0 = 7'b0010010;
+				6 : HEX0 = 7'b0000010;
+				7 : HEX0 = 7'b1111000;
+				8 : HEX0 = 7'b0000000;
+				9 : HEX0 = 7'b0010000;
+				10: HEX0 = 7'b1111111;
+				11: HEX0 = 7'b1111111;
+				12: HEX0 = 7'b1111111;
+				13: HEX0 = 7'b1111111;
+				14: HEX0 = 7'b1111111;
+				15: HEX0 = 7'b1111111;
+		endcase
+	end 
+				
+endmodule 
