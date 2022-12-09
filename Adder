@@ -1,0 +1,36 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 1
+//   Project: Adder to 7-segment 
+//   File Name: Lab01
+//   List of other files used: Adder.v and my7Seg.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+//   read in 8 of the switches treating them as two 4-bit binary numbers. 
+//   You will then display the numbers on two of the 7-segment displays. 
+//   Next you will add the numbers and display the result on another of the 
+//   7-segment displays.
+//-----------------------------------------------------------------------------    
+//   Date:	01/06/2022
+//   Version: 	1.0
+//   Revision: none 
+//-----------------------------------------------------------------------------
+
+module Adder (
+	input [3:0] num1,
+	input [3:0] num2,
+	output reg [4:0] X
+);
+//-------------------------------------------------------------
+// Whenever there is a change in num1 or num2 we will add them
+// together and output them for X
+//-------------------------------------------------------------
+
+always @(num1 or num2) 
+	begin 
+		X = num1 + num2;
+			
+	end
+endmodule	
