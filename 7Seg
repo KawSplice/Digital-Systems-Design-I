@@ -1,0 +1,193 @@
+ //-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 1
+//   Project: Adder to 7-segment 
+//   File Name: Lab01
+//   List of other files used: Adder.v and my7Seg.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+//   read in 8 of the switches treating them as two 4-bit binary numbers. 
+//   You will then display the numbers on two of the 7-segment displays. 
+//   Next you will add the numbers and display the result on another of the 
+//   7-segment displays.
+//-----------------------------------------------------------------------------    
+//   Date:	01/06/2022
+//   Version: 	1.0
+//   Revision: none 
+//-----------------------------------------------------------------------------
+ module my7Seg( 
+ 
+	input [4:0] c,
+	output reg[6:0] HEX1,
+	output reg[6:0] HEX0 
+);
+
+//-----------------------------------------------------------------------------    
+// We are creating a case statement that will let us display our values 
+//-----------------------------------------------------------------------------    
+
+always @(c)
+	begin 
+		case(c) 
+				
+				0:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b1000000;
+					end
+				1:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b1111001;
+					end
+				2:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b0100100;
+					end
+				3:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b0110000;
+					end
+				4:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b0011001;
+					end
+				5:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b0010010;
+					end
+				6:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b0000010;
+					end					
+				7:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b1111000;
+					end				
+				8:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b0000000;
+					end
+				9:
+					begin 	
+						HEX1 = 7'b1000000;
+						HEX0 = 7'b0010000;
+					end				
+				10:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b1000000;
+					end
+				11:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b1111001;
+					end
+				12:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b0100100;
+					end
+				13:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b0110000;
+					end
+				14:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b0011001;
+					end
+				15:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b0010010;
+					end
+				16:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b0000010;
+					end
+				17:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b1111000;
+					end
+				18:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b0000000;
+					end
+				19:
+					begin 	
+						HEX1 = 7'b1111001;
+						HEX0 = 7'b0010000;
+					end
+				20:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b1000000;
+					end
+				21:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b1111001;
+					end
+				22:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b0100100;
+					end
+				23:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b0110000;
+					end
+				24:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b0011001;
+					end
+				25:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b0010010;
+					end
+				26:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b0000010;
+					end
+				27:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b1111000;
+					end
+				28:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b0000000;
+					end
+				29:
+					begin 	
+						HEX1 = 7'b0100100;
+						HEX0 = 7'b0010000;
+					end
+				30:
+					begin 	
+						HEX1 = 7'b0110000;
+						HEX0 = 7'b1000000;
+					end					
+		endcase
+	end 
+				
+endmodule 
