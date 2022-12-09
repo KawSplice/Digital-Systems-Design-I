@@ -1,0 +1,55 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 2 
+//   Project: Intro to Hierarchical
+//   File Name: Lab2.v
+//   List of other files used: my7Seg.v, myClockDivider.v,my16BitCounter.v,
+//										 BinToBCDConversion.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: Design a basic 16-bit counter with reset and enable signals. 
+//   You will need to divide the system clock into something more useful as 50MHz is way too fast.
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision:
+// 		01/13/2022 Create the lab
+// 		01/14/2022 present the lab
+//-----------------------------------------------------------------------------
+module Lab2 ( 
+	input clk_50MHz,
+	input reset,
+	input enable,
+	output [6:0] HEX0,
+	output [6:0] HEX1,
+	output [6:0] HEX2,
+	output [6:0] HEX3,
+	output [6:0] HEX4
+);
+//-----------------------------------------------------------
+// Signal Declarations: wire
+//-----------------------------------------------------------
+
+	wire clk_100Hz;       //100Hz
+	wire [15:0] count;	 //count
+	wire [3:0] e;         //ten thousands
+	wire [3:0] d;			 //thousands
+	wire [3:0] c;			 //hundreds
+	wire [3:0] b;			 //tens
+	wire [3:0] a;   		 //ones
+
+//-----------------------------------------------------------
+// Top-level Declarations: modules
+//-----------------------------------------------------------
+
+		ClkDivider 				u1(clk_50MHz,clk_100Hz);
+		my16BitCounter #(16) u2(clk_100Hz,reset,enable,count);
+		BinToBCDConversion   u3(count,e,d,c,b,a);
+		my7Seg  					u4(e,HEX4); 
+		my7Seg  					u5(d,HEX3);
+		my7Seg  					u6(c,HEX2);
+		my7Seg  					u7(b,HEX1);
+		my7Seg  					u8(a,HEX0);
+endmodule
