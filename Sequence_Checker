@@ -1,0 +1,138 @@
+//-------------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab:  Lab4
+//   Project: digital door lock system
+//   File Name: Sequence_Checker.v 
+//   List of other files used: Key_Pad_Scanner.v, Clock_Divider.v, 
+//										 reset_15.v, Sequence_Builder.v, my7Seg.v								 	
+//-------------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description: Will use our sequence and check to see if it a vaild or
+// 						  invaild
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision: 02/4-22/2022
+//					
+//-----------------------------------------------------------------------------
+module Sequence_Checker(
+	input clk,
+	input reset,
+	input [3:0] seq1,
+	input [3:0] seq2,
+	input [3:0] seq3,
+	input [3:0] seq4,
+	input Check_seq,
+ 	output reg LEDE,
+	output reg LEDU,
+	output reg reset_out
+	);
+	
+reg [1:0] state1;
+reg [7:0] count;
+parameter [1:0] Init   = 2'b00,
+					 Check  = 2'b01,
+					 Error  = 2'b10,
+					 Unlock = 2'b11;
+initial 
+	begin 
+		LEDE <= 1'b0;
+		LEDU  <= 1'b0;
+		state1 <= Init;
+		count <= 8'b0;
+	end
+// Always block to handle the case portion					 
+always @(posedge clk or posedge reset) 
+begin 
+	if(reset) 
+	begin 
+		state1 <= Init;
+		reset_out <=0;
+		count <= 0;
+	end
+	else 
+		begin 
+			case(state1)
+				Init: 
+					begin
+						if(Check_seq)
+							state1 <= Check;	
+						else 
+							state1 <= state1;
+					end
+				Check: 
+						case ({seq1,seq2,seq3,seq4})
+									 16'h1234 : state1 <= Unlock;
+									 16'hABCD : state1 <= Unlock;
+									 16'h1122 : state1 <= Unlock;
+									 16'h1010 : state1 <= Unlock;
+									 16'h123A : state1 <= Unlock;
+									 16'h2580 : state1 <= Unlock;
+									 default  : state1 <= Error;
+						endcase 
+				Error:
+						begin 
+							if(count < 50) 
+								begin 
+									count <= count + 1;
+									state1 <= state1;
+								end
+							else  
+								begin
+									state1 <= Init;
+									reset_out <= 1;
+								end
+						end
+							
+				Unlock:
+						begin 
+						if(count < 50) 
+							begin 
+								count <= count + 1;
+								state1 <= state1;
+							end
+						else  
+								begin 
+									state1 <= Init;
+									reset_out <= 1;
+								end 
+					end
+		endcase 
+	end 
+end 
+// Always block to handle the state portion
+always @(state1) 
+begin
+	case(state1)
+		Init: 
+			begin
+				LEDE <= 1'b0;
+				LEDU <= 1'b0;
+	      end
+		Check: 
+			begin
+				 LEDE <= 1'b0;
+				 LEDU <= 1'b0;
+			end
+		Error: 
+			begin
+				 LEDE <= 1'b1;
+				 LEDU <= 1'b0;
+			end
+	
+		Unlock: 
+			begin
+				 LEDE <= 1'b0;
+				 LEDU <= 1'b1;
+			end
+		default:
+			begin
+				LEDE <= 1'b0;
+				LEDU <= 1'b0;
+	      end
+		
+	endcase
+end
+endmodule 
