@@ -1,0 +1,47 @@
+//-----------------------------------------------------------------------------    
+//   University: Oregon Institute of Technology – CSET Department
+//   Class: CST 231
+//   Author: Luis Solis
+//   Lab: Lab 3 
+//   Project: Multiplexed Display
+//   File Name: my12bit_upd_couner.v
+//   List of other files used: Clock_Divider.v, Lab3.v
+// 									 BinToBCDConversion.v, myMuxDisplay.v, my7Seg.v
+//-----------------------------------------------------------------------------    
+//   Description of the Code (1 - 5 lines)
+// 	Lab Description:We create a 4-bit counter with parameters so we can use
+// 		it as a 12-bit counter later on in your top level.
+//-----------------------------------------------------------------------------    
+//   Date: 01/04/2022
+//   Version: 1.0
+//   Revision:
+//					1/24/2022
+// 				1/26/2022
+//-----------------------------------------------------------------------------
+module my12bit_upd_counter
+	#(parameter BIT_COUNT = 12) (
+	input clk,
+	input enable,
+	input reset,
+	input up_dn,
+	output reg [BIT_COUNT   - 1:0] count
+);
+
+
+always@(posedge clk)
+	begin
+		if(reset)
+			count <= 12'b0;
+		else if (~enable)
+			count <= count;
+		else 
+			begin 
+				if(~up_dn)
+					count <= count + 12'd1;
+				else 
+					count <= count - 12'd1;
+			end
+	end
+endmodule
+
+
